@@ -1,13 +1,3 @@
-select * from 
--- salesforce_prod.work_orders
--- salesforce_prod.service_appointments
-salesforce_prod.service_resources
--- salesforce_prod.assigned_resources
--- salesforce_prod.delivery_orders
--- where is_last_mile_c is not null
--- limit 5
-;
-
 with appt_assigned_resources as (
     select distinct
         ser.name,
