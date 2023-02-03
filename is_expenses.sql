@@ -1,6 +1,6 @@
 select * 
 from dbt_big_db.rpt_is_expenses
-where inventoryid = '10982018' --workcompletedon > '2022-12-01'
+where inventoryid = 'xxxxxxxx' --workcompletedon > '2022-12-01'
 ;
 
 --New bronze - base_is_expenses_recon.sql
@@ -287,7 +287,7 @@ where snl.stock_number is not null
         or vlc.totallaborcost is not null
         or vlc.totalpartscost is not null
         or rr.actual_recon_cost is not null)
-    --and inv.inventoryid = '10982018' -- for testing dedupe
+    --and inv.inventoryid = '' -- for testing dedupe
 )
 
 -- ranking as (
@@ -369,5 +369,5 @@ left join "dev"."dbt_big_db"."rpt_sfdc_delivery_orders" od
         and od.shipment_record_type in ('Active', 'Legacy')
 where adds.code = 'SHIPPING'
     and snl.stock_number is not null
-    and inv.inventoryid = '11076200' -- for testing dedupe
+    and inv.inventoryid = '' -- for testing dedupe
 ;
