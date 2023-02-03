@@ -60,11 +60,11 @@ most_recent_opp as (
         else 'incomplete'
         end as compliance_status
 
-    from salesforce_prod.titles_registrations
+    from dbt_big_db.titles_registrations
     where is_deleted != 'true'
-        and record_type_id = '0122G000000ruqqQAA' --inbound 'to vroom'
+        and record_type_id = '' --inbound 'to vroom'
         and created_date >= '2022-12-01'
-        -- and vin_c = 'JTEBU5JR1A5017493'
+        -- and vin_c = 'xxx'
 ),
 
 ranking as (
@@ -80,21 +80,21 @@ select
     vin_c
     -- created_date,
     -- last_modified_date
-from salesforce_prod.titles_registrations 
-where record_type_id = '0122G000000ruqqQAA'
-        -- and vin_c = 'JTEBU5JR1A5017493'
+from dbt_big_db.titles_registrations 
+where record_type_id = 'xxx'
+        -- and vin_c = 'xxx'
         -- and last_modified_date >= '2022-12-20'
 group by 2--, 3, 4
 having count(vin_c) > 1
     and max(last_modified_date) >= '2022-12-20'
--- order by vin_c --limit 500 --where opportunity_c = '0062G00000qEE16QAG'
+-- order by vin_c --limit 500 --where opportunity_c = 'xxxx'
 ;
 
-select distinct record_type_id from salesforce_prod.titles_registrations
+select distinct record_type_id from dbt_big_db.titles_registrations
 ;
 
-select distinct name from salesforce_prod.record_types
--- where id = '0122G000000ruqqQAA'
+select distinct name from dbt_big_db.record_types
+-- where id = 'xxxx'
 ;
 
-select * from salesforce_prod.titles_registrations where vin_c = '1C6JJTBG1LL117853'
+select * from dbt_big_db.titles_registrations where vin_c = 'xxxx'
