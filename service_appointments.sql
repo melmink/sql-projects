@@ -3,8 +3,8 @@ with appt_assigned_resources as (
         ser.name,
         aar.service_appointment_id,
         aar.service_resource_id
-    from salesforce_prod.service_resources ser
-    left join salesforce_prod.assigned_resources aar
+    from dbt_big_db.service_resources ser
+    left join dbt_big_db.assigned_resources aar
         on aar.service_resource_id = ser.id
 )
 
@@ -37,35 +37,35 @@ select
     end as inbound_service_appointment_pickup_date,
     del.vehicle_grade_c as vehicle_grade,
     del.transit_type_c --dlo transit type - Delivery to Customer (Outbound), Buyback or Pick Up From Customer (Inbound)
-from salesforce_prod.service_appointments sa
+from dbt_big_db.service_appointments sa
 left join appt_assigned_resources ar
     on ar.service_appointment_id = sa.id
-left join salesforce_prod.work_orders wo
+left join dbt_big_db.work_orders wo
     on wo.id = sa.parent_record_id
-left join salesforce_prod.accounts acc
+left join dbt_big_db.accounts acc
     on acc.id = sa.account_id
-left join salesforce_prod.delivery_orders del
+left join dbt_big_db.delivery_orders del
     on del.id = wo.delivery_order_c
-where sa.appointment_number = 'SA-3028'
+where sa.appointment_number = 'SA-xxxx'
     -- and sa.status = 'Completed'
     and 
     del.transit_type_c in ('delivery_to_customer','buyback','pickup_from_customer')
     and del.is_last_mile_c = true
 ;
 
-select * from salesforce_prod.service_appointments where appointment_number = 'SA-3028'
+select * from dbt_big_db.service_appointments where appointment_number = 'SA-xxxx'
 ;
 
 -- Data sources:
-    -- salesforce_prod.work_orders - A record specific to Field Service that tracks a customer's need to have                                           receive last-mile delivery. Each Delivery Order that has last-mile delivery                                        to customer will have a Work Order
+    -- dbt_big_db.work_orders - A record specific to Field Service that tracks a customer's need to have                                           receive last-mile delivery. Each Delivery Order that has last-mile delivery                                        to customer will have a Work Order
 
-    -- salesforce_prod.service_appointments - The scheduled delivery of the vehicle. Completion of the Service                                                   Appointment completes the Work Order (and its parent Delivery Order)                                               Service Appointments appear on the Field Service Gantt chart.
+    -- dbt_big_db.service_appointments - The scheduled delivery of the vehicle. Completion of the Service                                                   Appointment completes the Work Order (and its parent Delivery Order)                                               Service Appointments appear on the Field Service Gantt chart.
 
-    -- salesforce_prod.service_resources - Driver. Service Resources deliver the car and fulfill Service                                                      Appointments.
+    -- dbt_big_db.service_resources - Driver. Service Resources deliver the car and fulfill Service                                                      Appointments.
 
-    -- salesforce_prod.assigned_resources - Connects Service Resources to Service Appointments
+    -- dbt_big_db.assigned_resources - Connects Service Resources to Service Appointments
 
-    -- salesforce_prod.delivery_orders - A record tracking the need to move a car from A to B for a purpose
+    -- dbt_big_db.delivery_orders - A record tracking the need to move a car from A to B for a purpose
 
 
 -- Create query at the granularity of Assigned Resource ID with the following columns:
@@ -94,24 +94,3 @@ select * from salesforce_prod.service_appointments where appointment_number = 'S
 
 -- Ask #2
 -- Customer names are the same, but different SA's and/or Drivers? Did we pick up the trade-in when we dropped off the sold car.
-
-    -- Count
-
-    Managing Hub Name 
-    Account Name 
-    Transit Type 
-    Delivery Order name
-    Appointment Number
-    --Opportunity Name 
-    --Opportunity Stage 
-    Vehicle 
-    At Hub Date 
-    Appointment Status 
-    --Appt Scheduled Start 
-    Appointment Actual Start 
-    --Appt Scheduled End 
-    Appointment Actual End 
-    # Actual Duration (Minutes)
-    Truck Number 
-    Driver Name 
-    Vehicle Grade 
